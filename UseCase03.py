@@ -108,6 +108,8 @@ def pre_process(data: pd.DataFrame) -> pd.DataFrame:
     grouped['date'] = grouped[['week', 'year']].apply(lambda r: make_date(r['year'], r['week'], 5), axis=1)
     grouped = grouped.rename(index=str, columns={'store': 'Store', 'department': 'Dept', 'date': 'Date', 'row_price': 'Weekly_Sales'})
 
+    print("grouped['Weekly_Sales']")
+    print(grouped['Weekly_Sales'])
     grouped['Weekly_Sales'] = grouped['Weekly_Sales'].round().astype(int)
 
     return grouped[['Store', 'Dept', 'Date', 'Weekly_Sales']]

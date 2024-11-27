@@ -77,15 +77,24 @@ def pre_process(data: pd.DataFrame):
     frequency_groups = groups.groupby(['o_customer_sk', 'invoice_year'])['o_order_id'].nunique().reset_index()
     frequency = frequency_groups.groupby(['o_customer_sk']).agg(frequency=('o_order_id', np.mean))
 
-    return pd.merge(frequency, ratio, left_index=True, right_index=True)
+    preprocessed_data = pd.merge(frequency, ratio, left_index=True, right_index=True)
 
+    # **양자화 적용**
+    # 반품 비율을 0~100 범위로 양자화
+    preprocessed_data['return_ratio'] = (preprocessed_data['return_ratio'] * 100).astype(int)
+    # 구매 빈도를 정수로 반올림
+    preprocessed_data['frequency'] = preprocessed_data['frequency'].round().astype(int)
 
-    x_purchases = pd.DataFrame({'CustomerID': ratios.index, 'ReturnRatio': ratios, 'Frequency': frequency})
-    x_purchases = x_purchases.dropna()
-    x_purchases['ReturnRatio'] = x_purchases['ReturnRatio'].astype(float)
-    x_purchases['Frequency'] = x_purchases['Frequency'].astype(float)
-
-    return x_purchases
+    return preprocessed_data
+    # return pd.merge(frequency, ratio, left_index=True, right_index=True)
+    #
+    #
+    # x_purchases = pd.DataFrame({'CustomerID': ratios.index, 'ReturnRatio': ratios, 'Frequency': frequency})
+    # x_purchases = x_purchases.dropna()
+    # x_purchases['ReturnRatio'] = x_purchases['ReturnRatio'].astype(float)
+    # x_purchases['Frequency'] = x_purchases['Frequency'].astype(float)
+    #
+    # return x_purchases
 
 
 def train(featurevector: pd.DataFrame, num_clusters) -> Pipeline:

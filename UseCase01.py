@@ -114,7 +114,9 @@ def serve(model: KMeans, x: pd.DataFrame):
     prediction = model.predict(x[['return_ratio', 'frequency']])
     x['c_cluster_id'] = prediction
 
-    return x.reset_index()[['o_customer_sk', 'c_cluster_id']]
+    result = x[['return_ratio', 'frequency',  'c_cluster_id']]
+
+    return result.reset_index(drop=True)
 
 
 def main():

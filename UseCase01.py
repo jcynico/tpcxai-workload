@@ -81,8 +81,10 @@ def pre_process(data: pd.DataFrame):
 
     # **양자화 적용**
     # 반품 비율을 0~100 범위로 양자화
+    preprocessed_data['return_ratio_orign'] =  preprocessed_data['return_ratio']
     preprocessed_data['return_ratio'] = (preprocessed_data['return_ratio']).astype(float)
     # 구매 빈도를 정수로 반올림
+    preprocessed_data['frequency_origin'] = preprocessed_data['frequency']
     preprocessed_data['frequency'] = preprocessed_data['frequency'].round().astype(int)
 
     return preprocessed_data
@@ -114,7 +116,7 @@ def serve(model: KMeans, x: pd.DataFrame):
     prediction = model.predict(x[['return_ratio', 'frequency']])
     x['c_cluster_id'] = prediction
 
-    result = x[['return_ratio', 'frequency',  'c_cluster_id']]
+    result = x[['return_ratio_origin', 'frequency_origin',  'c_cluster_id']]
 
     return result.reset_index(drop=True)
 

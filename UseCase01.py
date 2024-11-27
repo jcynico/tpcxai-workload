@@ -81,7 +81,7 @@ def pre_process(data: pd.DataFrame):
 
     # **양자화 적용**
     # 반품 비율을 0~100 범위로 양자화
-    preprocessed_data['return_ratio_orign'] =  preprocessed_data['return_ratio']
+    preprocessed_data['return_ratio_origin'] =  preprocessed_data['return_ratio']
     preprocessed_data['return_ratio'] = (preprocessed_data['return_ratio'] * 100).astype(int)
     # 구매 빈도를 정수로 반올림
     preprocessed_data['frequency_origin'] = preprocessed_data['frequency']
